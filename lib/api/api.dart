@@ -19,6 +19,7 @@ class Api{
       "ts": ts,
       "apikey": MarvelDev.publicKey,
       "hash": hash,
+      "limit": "10",
       "offset": offset.toString()};
   }
 
