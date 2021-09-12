@@ -6,6 +6,10 @@ List<Result> selectCharacters(RootState state) {
   return state.character.characters;
 }
 
+int selectCharacterCount(RootState state) {
+  return state.character.characters.length;
+}
+
 ApiParam selectApiParam(RootState state) {
   return state.character.apiParam;
 }
