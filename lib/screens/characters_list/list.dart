@@ -48,7 +48,7 @@ class _MovieListState extends State<ItemList> {
         _scrollController.offset / _scrollController.position.maxScrollExtent;
     const threshold = 0.8;
     if (positionRate > threshold) {
-      widget.onEndReached();
+    //  widget.onEndReached();
     }
   }
 
@@ -85,9 +85,13 @@ class _MovieListState extends State<ItemList> {
           return Container(
               height: 80,
               padding: const EdgeInsets.all(8),
-              child: const Card(
-                  child: Center(
-                    child: Text("読み込み中"),
+              child: Card(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      SizedBox(width: 20, height:20, child: CircularProgressIndicator()),
+                      SizedBox(width: 10),
+                      Text("読み込み中")],
                   )
               ));
         }
