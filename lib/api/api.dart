@@ -26,6 +26,7 @@ class Api{
   Future<CharactersResponse> requestCharacters({int offset = 0}) async{
     try{
       var url = Uri.https(host, "/v1/public/characters", _param(offset: offset));
+      print('url: $url');
       var response = await http.get(url);
       return CharactersResponse.fromJson(jsonDecode(response.body.toString()));
     } catch(e){

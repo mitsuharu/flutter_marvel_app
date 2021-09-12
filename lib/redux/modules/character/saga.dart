@@ -6,13 +6,15 @@ import 'package:flutter_marvel_app/redux/types/api_param.dart';
 import 'package:redux_saga/redux_saga.dart';
 
 Iterable characterSaga() sync* {
-  yield TakeLatest(_requestCharactersSaga, pattern: RequestCharacters);
+  yield TakeEvery(_requestCharactersSaga, pattern: RequestCharacters);
 }
 
-Iterable _requestCharactersSaga() sync* {
+Iterable _requestCharactersSaga({dynamic action}) sync* {
   try{
     var status = Result<RequestStatus>();
     yield Select(selector: selectRequestStatus, result: status);
+
+    print("characterSaga#requestCharactersSaga status: ${status.value}");
 
     if (status.value == RequestStatus.loading){
       return;
@@ -28,6 +30,7 @@ Iterable _requestCharactersSaga() sync* {
       result: response
     );
     yield Put(AppendCharacters(response: response.value!));
+    yield Put(ChangeRequestStatus(status: RequestStatus.success));
 
   }catch(e){
     // ignore: avoid_print
