@@ -48,7 +48,7 @@ class _MovieListState extends State<ItemList> {
         _scrollController.offset / _scrollController.position.maxScrollExtent;
     const threshold = 0.8;
     if (positionRate > threshold) {
-    //  widget.onEndReached();
+      widget.onEndReached();
     }
   }
 
