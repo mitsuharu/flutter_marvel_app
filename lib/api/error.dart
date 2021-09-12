@@ -1,74 +1,80 @@
-import 'dart:async';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-class CustomError implements Exception {
-  // ignore: prefer_typing_uninitialized_variables
-  late final _message;
-  // ignore: prefer_typing_uninitialized_variables
-  late final _prefix;
+class CustomException implements Exception {
+  final String message;
+  final String _type;
 
-  CustomError([this._message, this._prefix]);
+  CustomException(this.message, this._type);
 
   @override
   String toString() {
-    if (_message == null){
-      return "$_prefix";
+    if (message.isEmpty){
+      return _type;
     }
-    return "$_prefix: $_message";
+    return "$_type: $message";
   }
 }
 
-class NetworkError extends CustomError {
-  NetworkError([message]): super(message, "Network failed");
+const msgNetwork = "ネットワークに接続できませんでした。ネットワーク設定の確認、または時間をおいて再度お試しください。";
+const msgTimeout = "接続タイムアウトが発生した。ネットワーク設定の確認、または時間をおいて再度お試しください。";
+const msgFetch = "データ取得に問題が発生した。ネットワーク設定の確認、または時間をおいて再度お試しください。";
+const msgBadRequest = "リクエストに問題が発生した。ネットワーク設定の確認、または時間をおいて再度お試しください。";
+const msgUnauthorised = "リクエスト認証に問題が発生した。ネットワーク設定の確認、または時間をおいて再度お試しください。";
+const msgInvalidInput = "リクエストの設定に問題が発生した。ネットワーク設定の確認、または時間をおいて再度お試しください。";
+const msgUnknown = "不明な問題が発生した。ネットワーク設定の確認、または時間をおいて再度お試しください。";
+
+class NetworkException extends CustomException {
+  NetworkException([message = msgNetwork]): super(message, "Network failed");
 }
 
-class TimeoutError extends CustomError {
-  TimeoutError([message]): super(message, "Time out");
+class TimeoutException extends CustomException {
+  TimeoutException([message = msgTimeout]): super(message, "Timeout");
 }
 
-class FetchDataError extends CustomError {
-  FetchDataError([message])
-      : super(message, "Error During Communication");
+class FetchDataException extends CustomException {
+  FetchDataException([message = msgFetch])
+      : super(message, "Exception During Communication");
 }
 
-class BadRequestError extends CustomError {
-  BadRequestError([message=""]) : super(message, "Invalid Request");
+class BadRequestException extends CustomException {
+  BadRequestException([message = msgBadRequest]) : super(message, "Invalid Request");
 }
 
-class UnauthorisedError extends CustomError {
-  UnauthorisedError([message=""]) : super(message, "Unauthorised");
+class UnauthorisedException extends CustomException {
+  UnauthorisedException([message = msgUnauthorised]) : super(message, "Unauthorised");
 }
 
-class InvalidInputError extends CustomError {
-  InvalidInputError([message=""]) : super(message, "Invalid Input");
+class InvalidInputException extends CustomException {
+  InvalidInputException([message = msgInvalidInput ]) : super(message, "Invalid Input");
 }
 
-class UnknownError extends CustomError {
-  UnknownError([message=""]) : super(message, "unknown");
+class UnknownException extends CustomException {
+  UnknownException([message = msgUnknown]) : super(message, "Unknown");
 }
 
-void confirmError(http.Response response) {
+void throwIfServerException(http.Response response) {
   switch (response.statusCode) {
     case 200:
       break;
     case 400:
-      throw BadRequestError(response.body.toString());
+      throw BadRequestException();
     case 401:
     case 403:
-      throw UnauthorisedError(response.body.toString());
+      throw UnauthorisedException();
     case 500:
     default:
-      throw FetchDataError(
-          'Error occurred while Communication with Server with StatusCode: ${response.statusCode}');
+      throw FetchDataException();
   }
 }
 
-void throwIfNetworkException(dynamic e) {
+dynamic covertNetworkException(dynamic e) {
   if (e is SocketException){
-    throw NetworkError();
+    return NetworkException();
   }
   if (e is TimeoutException){
-    throw TimeoutError();
+    return TimeoutException();
   }
+
+  return UnknownException("エラーが発生した。ネットワーク設定の確認、または時間をおいて再度お試しください。");
 }
