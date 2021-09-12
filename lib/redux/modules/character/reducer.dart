@@ -8,9 +8,6 @@ CharacterState characterReducer(CharacterState state, dynamic action) {
     return state.copyWith(status: action.status);
   }
 
-
-
-
   if (action is AppendCharacters){
     final nextCharacters = [...state.characters, ...action.response.data.results];
     final nextApiParam = ApiParam(
