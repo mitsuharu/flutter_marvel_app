@@ -1,5 +1,5 @@
-class CharactorsResponse {
-  CharactorsResponse({
+class CharactersResponse {
+  CharactersResponse({
     required this.code,
     required this.status,
     required this.copyright,
@@ -16,7 +16,7 @@ class CharactorsResponse {
   late final String etag;
   late final Data data;
   
-  CharactorsResponse.fromJson(Map<String, dynamic> json){
+  CharactersResponse.fromJson(Map<String, dynamic> json){
     code = json['code'];
     status = json['status'];
     copyright = json['copyright'];
@@ -51,14 +51,14 @@ class Data {
   late final int limit;
   late final int total;
   late final int count;
-  late final List<Results> results;
+  late final List<Result> results;
   
   Data.fromJson(Map<String, dynamic> json){
     offset = json['offset'];
     limit = json['limit'];
     total = json['total'];
     count = json['count'];
-    results = List.from(json['results']).map((e)=>Results.fromJson(e)).toList();
+    results = List.from(json['results']).map((e)=>Result.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {
@@ -72,8 +72,8 @@ class Data {
   }
 }
 
-class Results {
-  Results({
+class Result {
+  Result({
     required this.id,
     required this.name,
     required this.description,
@@ -98,7 +98,7 @@ class Results {
   late final Events events;
   late final List<Urls> urls;
   
-  Results.fromJson(Map<String, dynamic> json){
+  Result.fromJson(Map<String, dynamic> json){
     id = json['id'];
     name = json['name'];
     description = json['description'];
