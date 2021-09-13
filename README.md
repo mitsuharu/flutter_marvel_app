@@ -1,16 +1,22 @@
-# flutter_marvel_app
+# Marvel App
 
-A new Flutter project.
+It is a Flutter App with Marvel API.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+<img src="./sceenshots/iron-man.png" width="300" />
 
-A few resources to get you started if this is your first Flutter project:
+### API key
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Marvel Developer Portal](https://developer.marvel.com/)
+
+
+```dart
+/// lib/api/api_key.dart
+class MarvelDev{
+  static const  publicKey = "aaaa";
+  static const  privateKey = "bbbb";
+}
+
+```
