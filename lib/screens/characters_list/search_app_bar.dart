@@ -15,19 +15,23 @@ class SearchAppBar extends StatelessWidget with PreferredSizeWidget {
     return TextField(
       textAlign: TextAlign.center, 
       decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
         hintText: 'Who is your Heroes or Villains?',
-        hintStyle: const TextStyle(color: Colors.white, fontStyle: FontStyle.italic),
+        hintStyle: const TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.white.withOpacity(0)),
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(32),
           ),  
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: const BorderSide(color: Colors.white),
+          borderRadius: BorderRadius.circular(32),
         ),  
       ),
-      style: const TextStyle(color: Colors.white,),
+      style: const TextStyle(color: Colors.black,),
       onSubmitted: onChanged,
       showCursor: true,
-      cursorColor: Colors.white,
+      cursorColor: Colors.lightBlueAccent,
       );
   }
 
@@ -37,7 +41,11 @@ class SearchAppBar extends StatelessWidget with PreferredSizeWidget {
       distinct: true,
       converter: (store) => (text) => store.dispatch(SearchCharacters(text: text)),
       builder: (context, onChanged){
-        return AppBar(title: textField(onChanged));
+        return AppBar(
+          title: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
+            child: textField(onChanged)
+            ));
       },
     );
   }
