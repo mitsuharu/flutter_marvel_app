@@ -264,24 +264,24 @@ class $CharacterTable extends Character
   }
 }
 
-class Serie extends DataClass implements Insertable<Serie> {
+class SeriesData extends DataClass implements Insertable<SeriesData> {
   final String id;
   final String characterId;
   final String title;
   final String description;
   final String url;
   final String thumbnailUrl;
-  Serie(
+  SeriesData(
       {required this.id,
       required this.characterId,
       required this.title,
       required this.description,
       required this.url,
       required this.thumbnailUrl});
-  factory Serie.fromData(Map<String, dynamic> data, GeneratedDatabase db,
+  factory SeriesData.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return Serie(
+    return SeriesData(
       id: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
       characterId: const StringType()
@@ -319,10 +319,10 @@ class Serie extends DataClass implements Insertable<Serie> {
     );
   }
 
-  factory Serie.fromJson(Map<String, dynamic> json,
+  factory SeriesData.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return Serie(
+    return SeriesData(
       id: serializer.fromJson<String>(json['id']),
       characterId: serializer.fromJson<String>(json['characterId']),
       title: serializer.fromJson<String>(json['title']),
@@ -344,14 +344,14 @@ class Serie extends DataClass implements Insertable<Serie> {
     };
   }
 
-  Serie copyWith(
+  SeriesData copyWith(
           {String? id,
           String? characterId,
           String? title,
           String? description,
           String? url,
           String? thumbnailUrl}) =>
-      Serie(
+      SeriesData(
         id: id ?? this.id,
         characterId: characterId ?? this.characterId,
         title: title ?? this.title,
@@ -361,7 +361,7 @@ class Serie extends DataClass implements Insertable<Serie> {
       );
   @override
   String toString() {
-    return (StringBuffer('Serie(')
+    return (StringBuffer('SeriesData(')
           ..write('id: $id, ')
           ..write('characterId: $characterId, ')
           ..write('title: $title, ')
@@ -384,7 +384,7 @@ class Serie extends DataClass implements Insertable<Serie> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Serie &&
+      (other is SeriesData &&
           other.id == this.id &&
           other.characterId == this.characterId &&
           other.title == this.title &&
@@ -393,7 +393,7 @@ class Serie extends DataClass implements Insertable<Serie> {
           other.thumbnailUrl == this.thumbnailUrl);
 }
 
-class SeriesCompanion extends UpdateCompanion<Serie> {
+class SeriesCompanion extends UpdateCompanion<SeriesData> {
   final Value<String> id;
   final Value<String> characterId;
   final Value<String> title;
@@ -421,7 +421,7 @@ class SeriesCompanion extends UpdateCompanion<Serie> {
         description = Value(description),
         url = Value(url),
         thumbnailUrl = Value(thumbnailUrl);
-  static Insertable<Serie> custom({
+  static Insertable<SeriesData> custom({
     Expression<String>? id,
     Expression<String>? characterId,
     Expression<String>? title,
@@ -494,7 +494,7 @@ class SeriesCompanion extends UpdateCompanion<Serie> {
   }
 }
 
-class $SeriesTable extends Series with TableInfo<$SeriesTable, Serie> {
+class $SeriesTable extends Series with TableInfo<$SeriesTable, SeriesData> {
   final GeneratedDatabase _db;
   final String? _alias;
   $SeriesTable(this._db, [this._alias]);
@@ -533,7 +533,7 @@ class $SeriesTable extends Series with TableInfo<$SeriesTable, Serie> {
   @override
   String get actualTableName => 'series';
   @override
-  VerificationContext validateIntegrity(Insertable<Serie> instance,
+  VerificationContext validateIntegrity(Insertable<SeriesData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -584,8 +584,8 @@ class $SeriesTable extends Series with TableInfo<$SeriesTable, Serie> {
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Serie map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Serie.fromData(data, _db,
+  SeriesData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return SeriesData.fromData(data, _db,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 

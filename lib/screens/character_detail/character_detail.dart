@@ -1,19 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_marvel_app/database/db.dart';
 import 'package:flutter_marvel_app/main.dart';
+import 'package:flutter_marvel_app/redux/modules/character_series/actions.dart';
+import 'package:flutter_marvel_app/redux/root_state.dart';
 import 'package:flutter_marvel_app/screens/commons/empty_view.dart';
 import 'package:bordered_text/bordered_text.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'package:flutter_marvel_app/api/api.dart';
 
 class CharacterDetailPage extends StatelessWidget{
   final String characterId;
   const CharacterDetailPage({Key? key, required this.characterId}) : super(key: key);
 
+  Widget seriesWidget(BuildContext context, CharacterData characterData){
+    return StreamBuilder(
+      stream: appDatabase.streamCharacterSeries(characterId),
+      builder: (context, AsyncSnapshot<List<SeriesData>> series){
+        if (series.data != null) {
+          return Column(
+            children: series.data!.map((e) => Text(e.title)).toList()
+          );
+        } else {
+          return const Text("series null");
+        }
+    });
+  }
+
   Widget sliverList(BuildContext context, CharacterData characterData){
     return SliverList(delegate: SliverChildListDelegate([
-      Text(characterData.description, style: GoogleFonts.carterOne(fontSize: 24)),
+      Visibility(
+        visible: characterData.description.isNotEmpty,
+        child: Text(characterData.description, style: GoogleFonts.carterOne(fontSize: 24))),
+      seriesWidget(context, characterData),
       const SizedBox(height: 1000)
     ])); 
   }
@@ -36,7 +55,7 @@ class CharacterDetailPage extends StatelessWidget{
       floating: true,
       forceElevated: true,
       pinned: true,
-      expandedHeight: size.height * 0.4,
+      expandedHeight: size.height * 0.5,
       flexibleSpace: FlexibleSpaceBar(
         title: BorderedText(
           strokeWidth: 1.0,
@@ -62,9 +81,6 @@ class CharacterDetailPage extends StatelessWidget{
   }
 
   Widget streamWidget(BuildContext context){
-
-    Api().requestCharacterSeries(characterId: characterId);
-    
     return StreamBuilder(
       stream: appDatabase.getCharacter(characterId),
       builder: (context, AsyncSnapshot<CharacterData> character){
@@ -74,6 +90,15 @@ class CharacterDetailPage extends StatelessWidget{
           return detailEmptyView(context);
         }
     });
+  }
+
+  Widget storeBuilder(BuildContext context){
+    return StoreBuilder<RootState>(
+      onInit: (store){
+        store.dispatch(ClearAndRequestCharacterSeries(characterId: characterId));
+      },
+      builder: (context, store) => streamWidget(context)
+    );
   }
 
   Widget detailEmptyView(BuildContext context){
@@ -86,7 +111,7 @@ class CharacterDetailPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: streamWidget(context), //storeConnector(context),
+      body: storeBuilder(context), //storeConnector(context),
     );
   }
 }

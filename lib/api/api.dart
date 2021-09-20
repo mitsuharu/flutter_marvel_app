@@ -32,7 +32,7 @@ class Api{
   Future<CharactersResponse> requestCharacters({int offset = 0, String? name}) async{
     try{
       var url = Uri.https(host, "/v1/public/characters", _param(offset: offset, name: name));
-      print('url: $url');
+
       var response = await http.get(url);
       throwIfServerException(response);
       return CharactersResponse.fromJson(jsonDecode(response.body.toString()));
@@ -61,9 +61,7 @@ class Api{
       var url = Uri.https(host, path, _param(offset: offset, name: null));
       print('url: $url');
       var response = await http.get(url);
- print(response.body.toString());
       throwIfServerException(response);
-      print(response.body.toString());
       return CharacterSeriesResponse.fromJson(jsonDecode(response.body.toString()));
     } catch(e){
       print('requestCharacterSeries error:$e');
