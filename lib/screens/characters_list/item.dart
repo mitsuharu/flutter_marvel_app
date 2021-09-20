@@ -19,21 +19,22 @@ class Item extends StatelessWidget {
     return Image.asset(noImagePath);
   }
 
-
   Widget container(BuildContext context) {
     return Row(
       children: [
         SizedBox(
-                height: 160,
-                width: 160,
-                child: imageWidget(),
-              ),
+          height: 160,
+          width: 160,
+          child: imageWidget(),
+        ),
         const SizedBox(width: 10),
         Expanded(child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(character.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            Text(character.description, maxLines: 3, overflow: TextOverflow.ellipsis),
+            Visibility(
+              visible: character.description.isNotEmpty,
+              child: Text(character.description, maxLines: 3, overflow: TextOverflow.ellipsis))
           ]),
         ),
       ],
