@@ -5,6 +5,8 @@ import 'package:flutter_marvel_app/screens/commons/empty_view.dart';
 import 'package:bordered_text/bordered_text.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'package:flutter_marvel_app/api/api.dart';
+
 class CharacterDetailPage extends StatelessWidget{
   final String characterId;
   const CharacterDetailPage({Key? key, required this.characterId}) : super(key: key);
@@ -60,6 +62,9 @@ class CharacterDetailPage extends StatelessWidget{
   }
 
   Widget streamWidget(BuildContext context){
+
+    Api().requestCharacterSeries(characterId: characterId);
+    
     return StreamBuilder(
       stream: appDatabase.getCharacter(characterId),
       builder: (context, AsyncSnapshot<CharacterData> character){

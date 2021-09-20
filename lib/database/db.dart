@@ -15,13 +15,14 @@ class Character extends Table {
 
 class Series extends Table {
   TextColumn get id => text()();
+  TextColumn get characterId => text()();
   TextColumn get title => text()();
   TextColumn get description => text()();
+  TextColumn get url => text()();
   TextColumn get thumbnailUrl => text()();
 
   @override
   Set<Column> get primaryKey => {id};
-
 }
 
 @UseMoor(tables: [Character, Series])

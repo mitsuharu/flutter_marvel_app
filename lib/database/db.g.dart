@@ -266,13 +266,17 @@ class $CharacterTable extends Character
 
 class Serie extends DataClass implements Insertable<Serie> {
   final String id;
+  final String characterId;
   final String title;
   final String description;
+  final String url;
   final String thumbnailUrl;
   Serie(
       {required this.id,
+      required this.characterId,
       required this.title,
       required this.description,
+      required this.url,
       required this.thumbnailUrl});
   factory Serie.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String? prefix}) {
@@ -280,10 +284,14 @@ class Serie extends DataClass implements Insertable<Serie> {
     return Serie(
       id: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      characterId: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}character_id'])!,
       title: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}title'])!,
       description: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}description'])!,
+      url: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}url'])!,
       thumbnailUrl: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}thumbnail_url'])!,
     );
@@ -292,8 +300,10 @@ class Serie extends DataClass implements Insertable<Serie> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<String>(id);
+    map['character_id'] = Variable<String>(characterId);
     map['title'] = Variable<String>(title);
     map['description'] = Variable<String>(description);
+    map['url'] = Variable<String>(url);
     map['thumbnail_url'] = Variable<String>(thumbnailUrl);
     return map;
   }
@@ -301,8 +311,10 @@ class Serie extends DataClass implements Insertable<Serie> {
   SeriesCompanion toCompanion(bool nullToAbsent) {
     return SeriesCompanion(
       id: Value(id),
+      characterId: Value(characterId),
       title: Value(title),
       description: Value(description),
+      url: Value(url),
       thumbnailUrl: Value(thumbnailUrl),
     );
   }
@@ -312,8 +324,10 @@ class Serie extends DataClass implements Insertable<Serie> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return Serie(
       id: serializer.fromJson<String>(json['id']),
+      characterId: serializer.fromJson<String>(json['characterId']),
       title: serializer.fromJson<String>(json['title']),
       description: serializer.fromJson<String>(json['description']),
+      url: serializer.fromJson<String>(json['url']),
       thumbnailUrl: serializer.fromJson<String>(json['thumbnailUrl']),
     );
   }
@@ -322,29 +336,37 @@ class Serie extends DataClass implements Insertable<Serie> {
     serializer ??= moorRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<String>(id),
+      'characterId': serializer.toJson<String>(characterId),
       'title': serializer.toJson<String>(title),
       'description': serializer.toJson<String>(description),
+      'url': serializer.toJson<String>(url),
       'thumbnailUrl': serializer.toJson<String>(thumbnailUrl),
     };
   }
 
   Serie copyWith(
           {String? id,
+          String? characterId,
           String? title,
           String? description,
+          String? url,
           String? thumbnailUrl}) =>
       Serie(
         id: id ?? this.id,
+        characterId: characterId ?? this.characterId,
         title: title ?? this.title,
         description: description ?? this.description,
+        url: url ?? this.url,
         thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
       );
   @override
   String toString() {
     return (StringBuffer('Serie(')
           ..write('id: $id, ')
+          ..write('characterId: $characterId, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
+          ..write('url: $url, ')
           ..write('thumbnailUrl: $thumbnailUrl')
           ..write(')'))
         .toString();
@@ -354,60 +376,82 @@ class Serie extends DataClass implements Insertable<Serie> {
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
       $mrjc(
-          title.hashCode, $mrjc(description.hashCode, thumbnailUrl.hashCode))));
+          characterId.hashCode,
+          $mrjc(
+              title.hashCode,
+              $mrjc(description.hashCode,
+                  $mrjc(url.hashCode, thumbnailUrl.hashCode))))));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Serie &&
           other.id == this.id &&
+          other.characterId == this.characterId &&
           other.title == this.title &&
           other.description == this.description &&
+          other.url == this.url &&
           other.thumbnailUrl == this.thumbnailUrl);
 }
 
 class SeriesCompanion extends UpdateCompanion<Serie> {
   final Value<String> id;
+  final Value<String> characterId;
   final Value<String> title;
   final Value<String> description;
+  final Value<String> url;
   final Value<String> thumbnailUrl;
   const SeriesCompanion({
     this.id = const Value.absent(),
+    this.characterId = const Value.absent(),
     this.title = const Value.absent(),
     this.description = const Value.absent(),
+    this.url = const Value.absent(),
     this.thumbnailUrl = const Value.absent(),
   });
   SeriesCompanion.insert({
     required String id,
+    required String characterId,
     required String title,
     required String description,
+    required String url,
     required String thumbnailUrl,
   })  : id = Value(id),
+        characterId = Value(characterId),
         title = Value(title),
         description = Value(description),
+        url = Value(url),
         thumbnailUrl = Value(thumbnailUrl);
   static Insertable<Serie> custom({
     Expression<String>? id,
+    Expression<String>? characterId,
     Expression<String>? title,
     Expression<String>? description,
+    Expression<String>? url,
     Expression<String>? thumbnailUrl,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (characterId != null) 'character_id': characterId,
       if (title != null) 'title': title,
       if (description != null) 'description': description,
+      if (url != null) 'url': url,
       if (thumbnailUrl != null) 'thumbnail_url': thumbnailUrl,
     });
   }
 
   SeriesCompanion copyWith(
       {Value<String>? id,
+      Value<String>? characterId,
       Value<String>? title,
       Value<String>? description,
+      Value<String>? url,
       Value<String>? thumbnailUrl}) {
     return SeriesCompanion(
       id: id ?? this.id,
+      characterId: characterId ?? this.characterId,
       title: title ?? this.title,
       description: description ?? this.description,
+      url: url ?? this.url,
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
     );
   }
@@ -418,11 +462,17 @@ class SeriesCompanion extends UpdateCompanion<Serie> {
     if (id.present) {
       map['id'] = Variable<String>(id.value);
     }
+    if (characterId.present) {
+      map['character_id'] = Variable<String>(characterId.value);
+    }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
     }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
+    }
+    if (url.present) {
+      map['url'] = Variable<String>(url.value);
     }
     if (thumbnailUrl.present) {
       map['thumbnail_url'] = Variable<String>(thumbnailUrl.value);
@@ -434,8 +484,10 @@ class SeriesCompanion extends UpdateCompanion<Serie> {
   String toString() {
     return (StringBuffer('SeriesCompanion(')
           ..write('id: $id, ')
+          ..write('characterId: $characterId, ')
           ..write('title: $title, ')
           ..write('description: $description, ')
+          ..write('url: $url, ')
           ..write('thumbnailUrl: $thumbnailUrl')
           ..write(')'))
         .toString();
@@ -450,6 +502,11 @@ class $SeriesTable extends Series with TableInfo<$SeriesTable, Serie> {
   late final GeneratedColumn<String?> id = GeneratedColumn<String?>(
       'id', aliasedName, false,
       typeName: 'TEXT', requiredDuringInsert: true);
+  final VerificationMeta _characterIdMeta =
+      const VerificationMeta('characterId');
+  late final GeneratedColumn<String?> characterId = GeneratedColumn<String?>(
+      'character_id', aliasedName, false,
+      typeName: 'TEXT', requiredDuringInsert: true);
   final VerificationMeta _titleMeta = const VerificationMeta('title');
   late final GeneratedColumn<String?> title = GeneratedColumn<String?>(
       'title', aliasedName, false,
@@ -459,13 +516,18 @@ class $SeriesTable extends Series with TableInfo<$SeriesTable, Serie> {
   late final GeneratedColumn<String?> description = GeneratedColumn<String?>(
       'description', aliasedName, false,
       typeName: 'TEXT', requiredDuringInsert: true);
+  final VerificationMeta _urlMeta = const VerificationMeta('url');
+  late final GeneratedColumn<String?> url = GeneratedColumn<String?>(
+      'url', aliasedName, false,
+      typeName: 'TEXT', requiredDuringInsert: true);
   final VerificationMeta _thumbnailUrlMeta =
       const VerificationMeta('thumbnailUrl');
   late final GeneratedColumn<String?> thumbnailUrl = GeneratedColumn<String?>(
       'thumbnail_url', aliasedName, false,
       typeName: 'TEXT', requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [id, title, description, thumbnailUrl];
+  List<GeneratedColumn> get $columns =>
+      [id, characterId, title, description, url, thumbnailUrl];
   @override
   String get aliasedName => _alias ?? 'series';
   @override
@@ -480,6 +542,14 @@ class $SeriesTable extends Series with TableInfo<$SeriesTable, Serie> {
     } else if (isInserting) {
       context.missing(_idMeta);
     }
+    if (data.containsKey('character_id')) {
+      context.handle(
+          _characterIdMeta,
+          characterId.isAcceptableOrUnknown(
+              data['character_id']!, _characterIdMeta));
+    } else if (isInserting) {
+      context.missing(_characterIdMeta);
+    }
     if (data.containsKey('title')) {
       context.handle(
           _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
@@ -493,6 +563,12 @@ class $SeriesTable extends Series with TableInfo<$SeriesTable, Serie> {
               data['description']!, _descriptionMeta));
     } else if (isInserting) {
       context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('url')) {
+      context.handle(
+          _urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
+    } else if (isInserting) {
+      context.missing(_urlMeta);
     }
     if (data.containsKey('thumbnail_url')) {
       context.handle(
