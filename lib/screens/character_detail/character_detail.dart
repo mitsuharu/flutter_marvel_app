@@ -4,16 +4,16 @@ import 'package:flutter_marvel_app/screens/commons/empty_view.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_marvel_app/redux/root_state.dart';
 import 'package:bordered_text/bordered_text.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 class CharacterDetailPage extends StatelessWidget{
   final int characterId;
   const CharacterDetailPage({Key? key, required this.characterId}) : super(key: key);
 
-  Widget sliverList(BuildContext context,){
+  Widget sliverList(BuildContext context, ch.Result result){
     return SliverList(delegate: SliverChildListDelegate([
-      const Text("a"),
-      const Text("b"),
+      Text(result.description, style: GoogleFonts.carterOne(fontSize: 24)),
       const SizedBox(height: 1000)
     ])); 
   }
@@ -57,7 +57,7 @@ class CharacterDetailPage extends StatelessWidget{
       sliverAppBar(context, result),
       SliverPadding(
         padding: const EdgeInsets.all(16.0),
-        sliver: sliverList(context),
+        sliver: sliverList(context, result),
       ),
     ]);
   }
