@@ -41,6 +41,19 @@ class Api{
     }
   }
 
+  Future<CharactersResponse> requestCharacter({required String characterId}) async{
+    try{
+      var url = Uri.https(host, "/v1/public/characters/" + characterId, );
+      print('url: $url');
+      var response = await http.get(url);
+      throwIfServerException(response);
+      return CharactersResponse.fromJson(jsonDecode(response.body.toString()));
+    } catch(e){
+      print('requestCharacters error:$e');
+      throw covertNetworkException(e);
+    }
+  }
+
   Future<ComicsResponse> requestComics({int offset = 0}) async{
     try{
       var url = Uri.https(host, "/v1/public/comics", _param(offset: offset)); 
