@@ -6,6 +6,10 @@ List<Result> selectCharacters(RootState state) {
   return state.character.characters;
 }
 
+Result? selectCharacter(RootState state, int characterId) {
+  return state.character.characters.firstWhere((e) => e.id == characterId);
+}
+
 int selectCharacterCount(RootState state) {
   return state.character.characters.length;
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_marvel_app/api/models/characters_response.dart';
 import 'package:flutter_marvel_app/redux/types/api_param.dart';
-import 'package:flutter_marvel_app/screens/character_detail/character_detail.dart';
+import 'package:flutter_marvel_app/router/router.dart';
 import 'package:flutter_marvel_app/screens/characters_list/list.dart';
 import 'package:flutter_marvel_app/screens/characters_list/search_app_bar.dart';
 import 'package:flutter_marvel_app/screens/commons/empty_view.dart';
@@ -15,16 +15,11 @@ class CharactersListPage extends StatelessWidget{
 
   void _onPress(BuildContext context, Result result){
     try{
-    var detailPage = CharacterDetailPage(result: result);
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => detailPage),
-      );
-    }on Exception{
+      routemaster.push("/detail/character/" + result.id.toString());
+    } on Exception{
       Fluttertoast.showToast(msg: "詳細ページの表示に失敗しました");
-
     }
   }
-
 
   Widget listWidget(BuildContext context){
     return StoreBuilder<RootState>(
@@ -38,7 +33,7 @@ class CharactersListPage extends StatelessWidget{
           hasNext: store.state.character.characters.length != store.state.character.apiParam.total,
           onRefresh: () => store.dispatch(ClearAndRequestCharacters()),
           onEndReached: () => store.dispatch(RequestCharacters()),
-          onPress: (res){_onPress(context, res);} );
+          onPress: (res) => _onPress(context, res) );
       });
   }
 
