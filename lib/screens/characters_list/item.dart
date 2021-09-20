@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_marvel_app/api/models/characters_response.dart';
+import 'package:flutter_marvel_app/database/db.dart';
 
 class Item extends StatelessWidget {
-  final Result result;
+  final CharacterData character;
   final VoidCallback onPress;
 
-  const Item({Key? key, required this.result, required this.onPress}) : super(key: key);
+  const Item({Key? key, required this.character, required this.onPress}) : super(key: key);
 
-  Widget imageWidget(Thumbnail thumbnail){
+  Widget imageWidget(){
     const noImagePath = 'lib/images/no-image.png';
-    if (thumbnail.path.isNotEmpty && thumbnail.extension.isNotEmpty){
-      final imageUrl = thumbnail.path + "." + thumbnail.extension;
+    if (character.thumbnailUrl.isNotEmpty){
       return FadeInImage.assetNetwork(
         fit: BoxFit.contain,
         placeholder: noImagePath,
-        image: imageUrl,
+        image: character.thumbnailUrl,
       );
     }
     return Image.asset(noImagePath);
@@ -27,18 +26,16 @@ class Item extends StatelessWidget {
         SizedBox(
                 height: 160,
                 width: 160,
-                child: imageWidget(result.thumbnail),
+                child: imageWidget(),
               ),
         const SizedBox(width: 10),
         Expanded(child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(result.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            Text(result.description, maxLines: 3, overflow: TextOverflow.ellipsis),
+            Text(character.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            Text(character.description, maxLines: 3, overflow: TextOverflow.ellipsis),
           ]),
         ),
-              
-        // Text(result.thumbnail.path + result.thumbnail.extension),
       ],
     );
   }

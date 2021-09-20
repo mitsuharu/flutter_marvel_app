@@ -1,6 +1,7 @@
 import 'package:flutter_marvel_app/api/api.dart';
 import 'package:flutter_marvel_app/api/error.dart';
-import 'package:flutter_marvel_app/api/models/characters_response.dart' as res; 
+import 'package:flutter_marvel_app/api/models/characters_response.dart' as res;
+import 'package:flutter_marvel_app/main.dart'; 
 import 'package:flutter_marvel_app/redux/modules/character/actions.dart';
 import 'package:flutter_marvel_app/redux/modules/character/selectors.dart';
 import 'package:flutter_marvel_app/redux/types/api_param.dart';
@@ -35,17 +36,20 @@ Iterable _requestCharactersSaga({dynamic action}) sync* {
       () => api.requestCharacters(offset: param.value!.count, name: param.value!.name),
       result: response
     );
-    yield Put(AppendCharacters(response: response.value!));
-    yield Put(ChangeRequestStatus(status: RequestStatus.success));
+    
+    yield Put(DideRequestCharacters(response: response.value!));
+    yield Call((){
+      appDatabase.insertCharacterFromApi(response.value!.data.results);
+    }); 
   }, Catch: (e, s) sync* {
     // ignore: avoid_print
     print("characterSaga#requestCharactersSaga $e, $s");
     if (e is CustomException){
       Fluttertoast.showToast(msg: e.message);
     }
-    var count = Result<int>();
-    yield Select(selector: selectCharacterCount, result: count);
-    if(count.value == 0){
+    var param = Result<ApiParam>();
+    yield Select(selector: selectApiParam, result: param);
+    if(param.value!.count == 0){
       yield Put(ChangeRequestStatus(status: RequestStatus.empty));
     }else{
       yield Put(ChangeRequestStatus(status: RequestStatus.failed));
@@ -56,6 +60,12 @@ Iterable _requestCharactersSaga({dynamic action}) sync* {
 
 Iterable _searchCharactersSaga({dynamic action}) sync* {
   yield Try(() sync* {
+
+    yield Call((){
+      appDatabase.deleteCharacterData();
+    });
+
+
     yield Put(ClearAndRequestCharacters());
   }, Catch: (e, s) sync* {
     // ignore: avoid_print

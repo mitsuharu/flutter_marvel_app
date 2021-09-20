@@ -8,8 +8,7 @@ final _routes = RouteMap(
   routes: {
     '/': (_) => const MaterialPage(child: CharactersListPage()),
     '/detail/character/:id': (info){
-      int characterId = int.parse(info.pathParameters['id']!);
-      return MaterialPage(child: CharacterDetailPage(characterId: characterId));
+      return MaterialPage(child: CharacterDetailPage(characterId: info.pathParameters['id']!));
     },
   },
 );

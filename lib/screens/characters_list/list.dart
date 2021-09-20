@@ -1,16 +1,17 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_marvel_app/api/models/characters_response.dart';
+import 'package:flutter_marvel_app/database/db.dart';
 import 'package:flutter_marvel_app/screens/characters_list/item.dart';
 
 class ItemList extends StatefulWidget {
 
-  final List<Result> items;
+  final List<CharacterData> items;
   final bool isLoading;
   final bool hasNext;
   final VoidCallback onRefresh;
   final VoidCallback onEndReached;
-  final ValueSetter<Result> onPress;
+  final ValueSetter<CharacterData> onPress;
 
   const ItemList({Key? key, 
     required this.items,
@@ -66,7 +67,7 @@ class _MovieListState extends State<ItemList> {
       itemBuilder: (BuildContext context, int index) {
 
         if (index < widget.items.length){
-          Result item = widget.items[index];
+          CharacterData item = widget.items[index];
 
           return Container(
               decoration: const BoxDecoration(
@@ -75,7 +76,7 @@ class _MovieListState extends State<ItemList> {
                 ),
               ),
               child: Item(
-                result: item,
+                character: item,
                 onPress: (){
                   widget.onPress(item);
                 },

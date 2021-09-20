@@ -8,10 +8,7 @@ CharacterState characterReducer(CharacterState state, dynamic action) {
     return state.copyWith(status: action.status);
   }
 
-  if (action is AppendCharacters){
-    final nextCharacters = [...state.characters, ...action.response.data.results];
-
-print('characterReducer#AppendCharacters count: ${action.response.data.count}');
+  if (action is DideRequestCharacters){
 
     final nextApiParam = state.apiParam.copyWith(
       offset: action.response.data.offset,
@@ -20,9 +17,8 @@ print('characterReducer#AppendCharacters count: ${action.response.data.count}');
       count: action.response.data.count);
     
     return state.copyWith(
-      characters: nextCharacters,
       apiParam: nextApiParam,
-      status: nextCharacters.isEmpty ? RequestStatus.empty : RequestStatus.success,
+      status: action.response.data.total == 0 ? RequestStatus.empty : RequestStatus.success,
     );
   }
 
@@ -40,7 +36,6 @@ print('characterReducer#AppendCharacters count: ${action.response.data.count}');
       total: 0,
       count: 0);
     return state.copyWith(
-      characters: [],
       apiParam: nextApiParam,
       status: RequestStatus.initial,
     );

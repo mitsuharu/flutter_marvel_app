@@ -17,7 +17,7 @@ class ChangeRequestStatus{
   ChangeRequestStatus({required this.status});
 }
 
-class AppendCharacters{
+class DideRequestCharacters{
   final CharactersResponse response;
-  AppendCharacters({required this.response});
+  DideRequestCharacters({required this.response});
 }
