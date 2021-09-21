@@ -1,14 +1,14 @@
-import 'package:flutter_marvel_app/redux/modules/character/actions.dart';
-import 'package:flutter_marvel_app/redux/modules/character/state.dart';
+import 'package:flutter_marvel_app/redux/modules/character_series/actions.dart';
+import 'package:flutter_marvel_app/redux/modules/character_series/state.dart';
 import 'package:flutter_marvel_app/redux/types/api_param.dart';
 
-CharacterState characterReducer(CharacterState state, dynamic action) {
+CharacterSeriesState characterSeriesReducer(CharacterSeriesState state, dynamic action) {
 
   if (action is ChangeRequestStatus){
     return state.copyWith(status: action.status);
   }
 
-  if (action is DideRequestCharacters){
+  if (action is DidRequestCharacterSeries){
 
     final nextApiParam = state.apiParam.copyWith(
       offset: action.response.data.offset,
@@ -22,14 +22,7 @@ CharacterState characterReducer(CharacterState state, dynamic action) {
     );
   }
 
-  if (action is SearchCharacters){
-    final nextApiParam = state.apiParam.copyWith(name: action.text);
-    return state.copyWith(
-      apiParam: nextApiParam,
-    );
-  }
-
-  if (action is ClearAndRequestCharacters){
+  if (action is ClearAndRequestCharacterSeries){
     final nextApiParam = state.apiParam.copyWith(
       offset: 0,
       limit: 20,
@@ -40,7 +33,6 @@ CharacterState characterReducer(CharacterState state, dynamic action) {
       status: RequestStatus.initial,
     );
   }
-
 
   return state;
 }

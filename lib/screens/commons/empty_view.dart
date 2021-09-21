@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class EmptyView extends StatelessWidget {
 
-  final VoidCallback onPress;
+  final VoidCallback? onPress;
   const EmptyView({Key? key, required this.onPress}) : super(key: key);
 
   final message = "見つかりませんでした";
@@ -21,14 +21,17 @@ class EmptyView extends StatelessWidget {
             child: Text(message, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
           ),
           const SizedBox(height: 10,),
-          ElevatedButton.icon(
-            icon: const Icon(
-              Icons.refresh,
-              color: Colors.white,
+          Visibility(
+            visible: onPress != null,
+            child: ElevatedButton.icon(
+              icon: const Icon(
+                Icons.refresh,
+                color: Colors.white,
+              ),
+              label: const Text('更新する'),
+              onPressed: onPress,
             ),
-            label: const Text('更新する'),
-            onPressed: onPress,
-          ),
+          )
         ],
       ),
     );

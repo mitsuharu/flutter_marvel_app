@@ -1,53 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_marvel_app/api/models/characters_response.dart';
-
-// class SpaceBox extends SizedBox {
-//   const SpaceBox({double width = 8, double height = 8})
-//       : super(width: width, height: height);
-
-//   const SpaceBox.width([double value = 8]) : super(width: value);
-//   const SpaceBox.height([double value = 8]) : super(height: value);
-// }
-
+import 'package:flutter_marvel_app/database/db.dart';
 
 class Item extends StatelessWidget {
-  final Result result;
+  final CharacterData character;
   final VoidCallback onPress;
 
-  const Item({Key? key, required this.result, required this.onPress}) : super(key: key);
+  const Item({Key? key, required this.character, required this.onPress}) : super(key: key);
 
-  Widget imageWidget(Thumbnail thumbnail){
+  Widget imageWidget(){
     const noImagePath = 'lib/images/no-image.png';
-    if (thumbnail.path.isNotEmpty && thumbnail.extension.isNotEmpty){
-      final imageUrl = thumbnail.path + "." + thumbnail.extension;
+    if (character.thumbnailUrl.isNotEmpty){
       return FadeInImage.assetNetwork(
         fit: BoxFit.contain,
         placeholder: noImagePath,
-        image: imageUrl,
+        image: character.thumbnailUrl,
       );
     }
     return Image.asset(noImagePath);
   }
 
-
   Widget container(BuildContext context) {
     return Row(
       children: [
         SizedBox(
-                height: 160,
-                width: 160,
-                child: imageWidget(result.thumbnail),
-              ),
+          height: 160,
+          width: 160,
+          child: imageWidget(),
+        ),
         const SizedBox(width: 10),
         Expanded(child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(result.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            Text(result.description, maxLines: 3, overflow: TextOverflow.ellipsis),
+            Text(character.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            Visibility(
+              visible: character.description.isNotEmpty,
+              child: Text(character.description, maxLines: 3, overflow: TextOverflow.ellipsis))
           ]),
         ),
-              
-        // Text(result.thumbnail.path + result.thumbnail.extension),
       ],
     );
   }
@@ -65,84 +54,3 @@ class Item extends StatelessWidget {
   }
 }
 
-
-// class Item extends StatefulWidget {
-
-//   final Movie movie;
-//   final VoidCallback onTapCell;
-
-//   MovieItem({required this.movie, required this.onTapCell});
-
-//   @override
-//   _MovieItemState createState() => _MovieItemState();
-// }
-
-// class _MovieItemState extends State<MovieItem> {
-
-//   @override
-//   Widget build(BuildContext context) {
-
-//     var imageUrl = widget.movie.posterUrl(PosterSize.normal);
-//     const double cartHeight = 115.0;
-//     const double padding = 16.0;
-//     const double imageHeight = cartHeight - padding;
-
-    // Widget imageWidget = Image.asset('lib/images/no_poster_image.png');
-    // if (imageUrl.length > 0){
-    //   imageWidget = FadeInImage.assetNetwork(
-    //     fit: BoxFit.cover,
-    //     placeholder: 'lib/images/no_poster_image.png',
-    //     image: imageUrl,
-    //   );
-    // }
-
-//     return InkWell(
-//       onTap: () {
-//         widget.onTapCell();
-//       },
-//       child: Padding(
-//         padding: const EdgeInsets.all(padding),
-//         child: Container(
-// //        height: cartHeight,
-//           child: Row(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             mainAxisAlignment: MainAxisAlignment.start,
-//             mainAxisSize: MainAxisSize.min,
-//             children: <Widget>[
-              // Container(
-              //   height: imageHeight,
-              //   width: imageHeight * 2.0/3.0,
-              //   child: imageWidget,
-              // ),
-//               SpaceBox.width(16),
-
-              // Expanded(child: Column(
-              //     crossAxisAlignment: CrossAxisAlignment.start,
-              //     children: <Widget>[
-              //       Text(widget.movie.title,
-              //           style: TextStyle(fontWeight: FontWeight.bold)),
-              //       Text(widget.movie.releasedAt()),
-              //       Text(widget.movie.overview,
-              //         maxLines: 3,
-              //         overflow: TextOverflow.ellipsis,
-              //       ),]),
-              // ),
-//               SpaceBox.width(16),
-//               Container(
-//                 height: cartHeight,
-//                 child: IconButton(
-//                   padding: new EdgeInsets.all(0.0),
-//                   icon: new Icon(Icons.event, size: 18.0), // event
-//                   onPressed: (){
-//                     print("add to calendar");
-//                     _registerToCalendar();
-//                   },
-//                 ) ,
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
