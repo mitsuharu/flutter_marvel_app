@@ -3,44 +3,45 @@ import 'package:flutter_marvel_app/redux/modules/character/state.dart';
 import 'package:flutter_marvel_app/redux/types/api_param.dart';
 
 CharacterState characterReducer(CharacterState state, dynamic action) {
-
-  if (action is ChangeRequestStatus){
-    return state.copyWith(status: action.status);
-  }
-
-  if (action is DideRequestCharacters){
-
-    final nextApiParam = state.apiParam.copyWith(
-      offset: action.response.data.offset,
-      limit: action.response.data.limit,
-      total: action.response.data.total,
-      count: action.response.data.count);
-    
+  if (action is RequestCharacters) {
+    final nextApiParam = ApiParam.initialState().copyWith(name: action.name);
     return state.copyWith(
       apiParam: nextApiParam,
-      status: action.response.data.total == 0 ? RequestStatus.empty : RequestStatus.success,
+      status: RequestStatus.loading,
     );
   }
 
-  if (action is SearchCharacters){
-    final nextApiParam = state.apiParam.copyWith(name: action.text);
+  if (action is RequestCharactersSucceeded) {
+    final _data = action.response?.data;
+    final nextApiParam = _data != null
+        ? state.apiParam.copyWith(
+            offset: _data.offset,
+            limit: _data.limit,
+            total: _data.total,
+            hasNext: (_data.offset + _data.limit) < _data.total)
+        : state.apiParam;
+
+    print(
+        "nextApiParam offset: ${nextApiParam.offset}, limit: ${nextApiParam.limit}, total: ${nextApiParam.total}, hasNext: ${nextApiParam.hasNext}");
+
     return state.copyWith(
       apiParam: nextApiParam,
+      status:
+          nextApiParam.total == 0 ? RequestStatus.empty : RequestStatus.success,
     );
   }
 
-  if (action is ClearAndRequestCharacters){
-    final nextApiParam = state.apiParam.copyWith(
-      offset: 0,
-      limit: 20,
-      total: 0,
-      count: 0);
+  if (action is RequestCharactersFailed) {
     return state.copyWith(
-      apiParam: nextApiParam,
-      status: RequestStatus.initial,
+      status: RequestStatus.failed,
     );
   }
 
+  if (action is LoadMoreCharacters) {
+    return state.copyWith(
+      status: RequestStatus.loading,
+    );
+  }
 
   return state;
 }

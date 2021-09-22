@@ -1,23 +1,20 @@
 import 'package:flutter_marvel_app/api/models/characters_response.dart';
-import 'package:flutter_marvel_app/redux/types/api_param.dart';
 
-class RequestCharacters{
+/// 初期リクエストを行う
+class RequestCharacters {
+  final String? name;
+  RequestCharacters({this.name});
 }
 
-class ClearAndRequestCharacters{
+/// 初期リクエストが成功した
+class RequestCharactersSucceeded {
+  final CharactersResponse? response;
+  RequestCharactersSucceeded({this.response});
 }
 
-class SearchCharacters{
-  final String text;
-  SearchCharacters({required this.text});
-}
+/// 初期リクエストが失敗した
+class RequestCharactersFailed {}
 
-class ChangeRequestStatus{
-  final RequestStatus status;
-  ChangeRequestStatus({required this.status});
-}
-
-class DideRequestCharacters{
-  final CharactersResponse response;
-  DideRequestCharacters({required this.response});
-}
+/// 続きのリクエストを行う
+/// 完了時はRequestCharactersSucceeded, RequestCharactersFailed で併用可能
+class LoadMoreCharacters {}
