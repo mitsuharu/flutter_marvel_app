@@ -7,16 +7,16 @@ import 'package:routemaster/routemaster.dart';
 final _routes = RouteMap(
   routes: {
     '/': (_) => const MaterialPage(child: CharactersListPage()),
-    '/detail/character/:id': (info){
-      return MaterialPage(child: CharacterDetailPage(characterId: info.pathParameters['id']!));
+    '/detail/character/:id': (info) {
+      return MaterialPage(
+          child: CharacterDetailPage(characterId: info.pathParameters['id']!));
     },
   },
 );
 
 final routemaster = RoutemasterDelegate(
- routesBuilder: (context) => _routes,
+  routesBuilder: (context) => _routes,
 );
-
 
 class MyAppRouter extends StatelessWidget {
   const MyAppRouter({Key? key}) : super(key: key);
@@ -25,7 +25,9 @@ class MyAppRouter extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Flutter Demo',
-      theme: ThemeData(primarySwatch: Colors.blue,),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
       routerDelegate: routemaster,
       routeInformationParser: const RoutemasterParser(),
     );

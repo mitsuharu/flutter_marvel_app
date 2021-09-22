@@ -29,7 +29,7 @@ Iterable _requestCharactersSaga({dynamic action}) sync* {
 Iterable _fetchCharactersSaga({dynamic action}) sync* {
   yield Try(() sync* {
     var param = Result<ApiParam>();
-    yield Select(selector: selectApiParam, result: param);
+    yield Select(selector: selectCharacterApiParam, result: param);
     if (param.value!.hasNext == false) {
       // 次がなければ何もしないで終了する
       yield Put(RequestCharactersSucceeded());

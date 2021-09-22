@@ -5,11 +5,12 @@ class Item extends StatelessWidget {
   final CharacterData character;
   final VoidCallback onPress;
 
-  const Item({Key? key, required this.character, required this.onPress}) : super(key: key);
+  const Item({Key? key, required this.character, required this.onPress})
+      : super(key: key);
 
-  Widget imageWidget(){
+  Widget imageWidget() {
     const noImagePath = 'lib/images/no-image.png';
-    if (character.thumbnailUrl.isNotEmpty){
+    if (character.thumbnailUrl.isNotEmpty) {
       return FadeInImage.assetNetwork(
         fit: BoxFit.contain,
         placeholder: noImagePath,
@@ -28,13 +29,16 @@ class Item extends StatelessWidget {
           child: imageWidget(),
         ),
         const SizedBox(width: 10),
-        Expanded(child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(character.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        Expanded(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(character.name,
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             Visibility(
-              visible: character.description.isNotEmpty,
-              child: Text(character.description, maxLines: 3, overflow: TextOverflow.ellipsis))
+                visible: character.description.isNotEmpty,
+                child: Text(character.description,
+                    maxLines: 3, overflow: TextOverflow.ellipsis))
           ]),
         ),
       ],
@@ -48,9 +52,7 @@ class Item extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Container(child: container(context)),
-      ) ,
+      ),
     );
-    
   }
 }
-

@@ -9,7 +9,7 @@ class CustomException implements Exception {
 
   @override
   String toString() {
-    if (message.isEmpty){
+    if (message.isEmpty) {
       return _type;
     }
     return "$_type: $message";
@@ -25,11 +25,11 @@ const msgInvalidInput = "リクエストの設定に問題が発生した。ネ�
 const msgUnknown = "不明な問題が発生した。ネットワーク設定の確認、または時間をおいて再度お試しください。";
 
 class NetworkException extends CustomException {
-  NetworkException([message = msgNetwork]): super(message, "Network failed");
+  NetworkException([message = msgNetwork]) : super(message, "Network failed");
 }
 
 class TimeoutException extends CustomException {
-  TimeoutException([message = msgTimeout]): super(message, "Timeout");
+  TimeoutException([message = msgTimeout]) : super(message, "Timeout");
 }
 
 class FetchDataException extends CustomException {
@@ -38,15 +38,18 @@ class FetchDataException extends CustomException {
 }
 
 class BadRequestException extends CustomException {
-  BadRequestException([message = msgBadRequest]) : super(message, "Invalid Request");
+  BadRequestException([message = msgBadRequest])
+      : super(message, "Invalid Request");
 }
 
 class UnauthorisedException extends CustomException {
-  UnauthorisedException([message = msgUnauthorised]) : super(message, "Unauthorised");
+  UnauthorisedException([message = msgUnauthorised])
+      : super(message, "Unauthorised");
 }
 
 class InvalidInputException extends CustomException {
-  InvalidInputException([message = msgInvalidInput ]) : super(message, "Invalid Input");
+  InvalidInputException([message = msgInvalidInput])
+      : super(message, "Invalid Input");
 }
 
 class UnknownException extends CustomException {
@@ -69,10 +72,10 @@ void throwIfServerException(http.Response response) {
 }
 
 dynamic covertNetworkException(dynamic e) {
-  if (e is SocketException){
+  if (e is SocketException) {
     return NetworkException();
   }
-  if (e is TimeoutException){
+  if (e is TimeoutException) {
     return TimeoutException();
   }
 

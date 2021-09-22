@@ -1,5 +1,6 @@
 import 'package:flutter_marvel_app/api/models/characters_response.dart' as ch;
-import 'package:flutter_marvel_app/api/models/character_series_response.dart' as cs;
+import 'package:flutter_marvel_app/api/models/character_series_response.dart'
+    as cs;
 import 'package:moor/ffi.dart';
 import 'package:moor/moor.dart';
 part 'db.g.dart';
@@ -40,7 +41,8 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Stream<List<SeriesData>> streamCharacterSeries(String chracterId) {
-    return (select(series)..where((tbl) => tbl.characterId.equals(chracterId))).watch();
+    return (select(series)..where((tbl) => tbl.characterId.equals(chracterId)))
+        .watch();
   }
 
   Stream<List<CharacterData>> streamCharacters() {
@@ -55,29 +57,38 @@ class AppDatabase extends _$AppDatabase {
     return delete(character).go();
   }
 
+  Future<int> deleteSeriesData() {
+    return delete(series).go();
+  }
+
   Future<void> insertCharacterFromApi(List<ch.Result> results) async {
-    var rows = results.map((e) => CharacterCompanion.insert(
-      id: e.id.toString(),
-      name: e.name,
-      description: e.description,
-      thumbnailUrl: thumbnailUrl(e.thumbnail))).toList();    
-    await batch((batch){
+    var rows = results
+        .map((e) => CharacterCompanion.insert(
+            id: e.id.toString(),
+            name: e.name,
+            description: e.description,
+            thumbnailUrl: thumbnailUrl(e.thumbnail)))
+        .toList();
+    await batch((batch) {
       batch.insertAll(character, rows);
     });
   }
 
-  Future<void> insertSeriesFromApi(String characterId, List<cs.Result> results) async {
+  Future<void> insertSeriesFromApi(
+      String characterId, List<cs.Result> results) async {
     print("insertSeriesFromApi characterId: $characterId, ${results.length}");
 
-    try{
-      var rows = results.map((e) => SeriesCompanion.insert(
-        id: e.id.toString(),
-        characterId: characterId,
-        title: e.title,
-        description: e.description ?? "",
-        url: e.urls.isNotEmpty ? e.urls[0].url : "",
-        thumbnailUrl: csThumbnailUrl(e.thumbnail))).toList();    
-      await batch((batch){
+    try {
+      var rows = results
+          .map((e) => SeriesCompanion.insert(
+              id: e.id.toString(),
+              characterId: characterId,
+              title: e.title,
+              description: e.description ?? "",
+              url: e.urls.isNotEmpty ? e.urls[0].url : "",
+              thumbnailUrl: csThumbnailUrl(e.thumbnail)))
+          .toList();
+      await batch((batch) {
         batch.insertAll(series, rows);
       });
     } catch (error) {
@@ -85,20 +96,18 @@ class AppDatabase extends _$AppDatabase {
       print("insertSeriesFromApi $error");
     }
   }
-
-
 }
 
-String thumbnailUrl(ch.Thumbnail thumbnail){
-    if (thumbnail.path.isNotEmpty && thumbnail.extension.isNotEmpty){
-      return thumbnail.path + "." + thumbnail.extension;
-    }
-    return '';
+String thumbnailUrl(ch.Thumbnail thumbnail) {
+  if (thumbnail.path.isNotEmpty && thumbnail.extension.isNotEmpty) {
+    return thumbnail.path + "." + thumbnail.extension;
+  }
+  return '';
 }
 
-String csThumbnailUrl(cs.Thumbnail thumbnail){
-    if (thumbnail.path.isNotEmpty && thumbnail.extension.isNotEmpty){
-      return thumbnail.path + "." + thumbnail.extension;
-    }
-    return '';
+String csThumbnailUrl(cs.Thumbnail thumbnail) {
+  if (thumbnail.path.isNotEmpty && thumbnail.extension.isNotEmpty) {
+    return thumbnail.path + "." + thumbnail.extension;
+  }
+  return '';
 }

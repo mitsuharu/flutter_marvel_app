@@ -5,7 +5,6 @@ import 'package:flutter_marvel_app/database/db.dart';
 import 'package:flutter_marvel_app/screens/characters_list/item.dart';
 
 class ItemList extends StatefulWidget {
-
   final List<CharacterData> items;
   final bool isLoading;
   final bool hasNext;
@@ -13,7 +12,8 @@ class ItemList extends StatefulWidget {
   final VoidCallback onEndReached;
   final ValueSetter<CharacterData> onPress;
 
-  const ItemList({Key? key, 
+  const ItemList({
+    Key? key,
     required this.items,
     required this.isLoading,
     required this.hasNext,
@@ -27,7 +27,6 @@ class ItemList extends StatefulWidget {
 }
 
 class _MovieListState extends State<ItemList> {
-
   // スクロール検知
   final ScrollController _scrollController = ScrollController();
 
@@ -53,9 +52,8 @@ class _MovieListState extends State<ItemList> {
     }
   }
 
-  Widget movieListWidget(){
-    
-    if (widget.isLoading && widget.items.isEmpty){
+  Widget movieListWidget() {
+    if (widget.isLoading && widget.items.isEmpty) {
       return const Center(
         child: CircularProgressIndicator(),
       );
@@ -65,40 +63,41 @@ class _MovieListState extends State<ItemList> {
       controller: _scrollController,
       itemCount: widget.items.length + (widget.hasNext == true ? 1 : 0),
       itemBuilder: (BuildContext context, int index) {
-
-        if (index < widget.items.length){
+        if (index < widget.items.length) {
           CharacterData item = widget.items[index];
 
           return Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: Colors.black38),
-                ),
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(color: Colors.black38),
               ),
-              child: Item(
-                character: item,
-                onPress: (){
-                  widget.onPress(item);
-                },
-              ),
+            ),
+            child: Item(
+              character: item,
+              onPress: () {
+                widget.onPress(item);
+              },
+            ),
           );
-        }else{
+        } else {
           return Container(
               height: 80,
               padding: const EdgeInsets.all(8),
               child: Card(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      SizedBox(width: 20, height:20, child: CircularProgressIndicator()),
-                      SizedBox(width: 10),
-                      Text("読み込み中")],
-                  )
-              ));
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator()),
+                  SizedBox(width: 10),
+                  Text("読み込み中")
+                ],
+              )));
         }
       },
     );
-
 
     return RefreshIndicator(
         onRefresh: () async {

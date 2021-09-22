@@ -1,23 +1,21 @@
 import 'package:flutter_marvel_app/redux/modules/character/state.dart';
-import 'package:flutter_marvel_app/redux/modules/character_series/state.dart';
+import 'package:flutter_marvel_app/redux/modules/series/state.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-class RootState{
-
+class RootState {
   final CharacterState character;
-  final CharacterSeriesState characterSeries;
-  const RootState({required this.character, required this.characterSeries});
+  final SeriesState series;
+  const RootState({required this.character, required this.series});
 
-  RootState copyWith({CharacterState? character, CharacterSeriesState? characterSeries}) {
+  RootState copyWith({CharacterState? character, SeriesState? series}) {
     return RootState(
-      character: character ?? this.character,
-      characterSeries: characterSeries ?? this.characterSeries);
+        character: character ?? this.character, series: series ?? this.series);
   }
 
-  static initialState(){
+  static initialState() {
     return RootState(
-      character: CharacterState.initialState(),
-      characterSeries: CharacterSeriesState.initialState());
+        character: CharacterState.initialState(),
+        series: SeriesState.initialState());
   }
 }
