@@ -7,24 +7,22 @@ import 'package:redux_logging/redux_logging.dart';
 
 /// initialize redux
 Future<Store<RootState>> initializeRedux() async {
-
   // create the saga middleware
   final sagaMiddleware = createSagaMiddleware();
 
   // Create store and apply middleware
-  final store = Store<RootState>(
-    rootReducer,
-    initialState: RootState.initialState(),
-    middleware: [
-      applyMiddleware(sagaMiddleware), 
-      LoggingMiddleware.printer(),
-    ]);
-    
-    //connect to store
-    sagaMiddleware.setStore(store);
+  final store = Store<RootState>(rootReducer,
+      initialState: RootState.initialState(),
+      middleware: [
+        applyMiddleware(sagaMiddleware),
+        LoggingMiddleware.printer(),
+      ]);
 
-    // then run the saga
-    sagaMiddleware.run(rootSaga);
-    
-    return store;
+  //connect to store
+  sagaMiddleware.setStore(store);
+
+  // then run the saga
+  sagaMiddleware.run(rootSaga);
+
+  return store;
 }

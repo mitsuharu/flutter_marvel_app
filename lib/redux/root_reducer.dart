@@ -1,10 +1,9 @@
 import 'package:flutter_marvel_app/redux/modules/character/reducer.dart';
-import 'package:flutter_marvel_app/redux/modules/character_series/reducer.dart';
+import 'package:flutter_marvel_app/redux/modules/series/reducer.dart';
 import 'package:flutter_marvel_app/redux/root_state.dart';
 
-RootState rootReducer(RootState state, dynamic action){
+RootState rootReducer(RootState state, dynamic action) {
   return state.copyWith(
-    character: characterReducer(state.character, action),
-    characterSeries: characterSeriesReducer(state.characterSeries, action)
-  );
+      character: characterReducer(state.character, action),
+      series: seriesReducer(state.series, action));
 }

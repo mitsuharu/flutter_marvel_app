@@ -1,17 +1,21 @@
-import 'package:flutter_marvel_app/redux/modules/character/actions.dart';
-import 'package:flutter_marvel_app/redux/modules/character/state.dart';
+import 'package:flutter_marvel_app/redux/modules/series/actions.dart';
+import 'package:flutter_marvel_app/redux/modules/series/state.dart';
 import 'package:flutter_marvel_app/redux/types/api_param.dart';
 
-CharacterState characterReducer(CharacterState state, dynamic action) {
-  if (action is RequestCharacters) {
-    final nextApiParam = ApiParam.initialState().copyWith(name: action.name);
+SeriesState seriesReducer(SeriesState state, dynamic action) {
+  if (action is RequestSeries) {
+    print("RequestSeries action.characterId: ${action.characterId}");
+    final nextApiParam =
+        ApiParam.initialState().copyWith(characterId: action.characterId);
+
+    print("RequestSeries nextApiParam: ${nextApiParam.characterId}");
     return state.copyWith(
       apiParam: nextApiParam,
       status: RequestStatus.loading,
     );
   }
 
-  if (action is RequestCharactersSucceeded) {
+  if (action is RequestSeriesSucceeded) {
     final _data = action.response?.data;
     final nextApiParam = _data != null
         ? state.apiParam.copyWith(
@@ -27,13 +31,13 @@ CharacterState characterReducer(CharacterState state, dynamic action) {
     );
   }
 
-  if (action is RequestCharactersFailed) {
+  if (action is RequestSeriesFailed) {
     return state.copyWith(
       status: RequestStatus.failed,
     );
   }
 
-  if (action is LoadMoreCharacters) {
+  if (action is LoadMoreSeries) {
     return state.copyWith(
       status: RequestStatus.loading,
     );
