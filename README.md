@@ -1,14 +1,20 @@
-# Marvel App
+# App for Marvel Fan
 
-It is a Flutter App with Marvel API.
+It shows the Marvel Heros and Villains with Offical Marvel API.
+
+<img src="./sceenshots/iron-man.png" width="200" />
 
 
-### My devlopment env as follows
+## Tech Stack
+
+Frameworks
+
+- Flutter
 
 ```shell
 % flutter doctor
 Doctor summary (to see all details, run flutter doctor -v):
-[✓] Flutter (Channel stable, 2.5.0, on macOS 11.5.2 20G95 darwin-x64, locale ja-JP)
+[✓] Flutter (Channel stable, 2.5.1, on macOS 11.5.2 20G95 darwin-x64, locale ja-JP)
 [✓] Android toolchain - develop for Android devices (Android SDK version 29.0.2)
 [✓] Xcode - develop for iOS and macOS
 [✓] Chrome - develop for the web
@@ -19,10 +25,16 @@ Doctor summary (to see all details, run flutter doctor -v):
 • No issues found!
 ```
 
+State
+
+- Redux Saga
+
+DB
+
+- [Moor](https://moor.simonbinder.eu/)
+
 
 ## Getting Started
-
-<img src="./sceenshots/iron-man.png" width="300" />
 
 ### API key
 
