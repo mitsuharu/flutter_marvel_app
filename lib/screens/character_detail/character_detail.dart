@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_marvel_app/database/db.dart';
 import 'package:flutter_marvel_app/main.dart';
-import 'package:flutter_marvel_app/redux/modules/character/selectors.dart';
 import 'package:flutter_marvel_app/redux/modules/series/actions.dart';
 import 'package:flutter_marvel_app/redux/modules/series/selectors.dart';
 import 'package:flutter_marvel_app/redux/root_state.dart';
@@ -43,22 +42,24 @@ class CharacterDetailPage extends StatelessWidget {
         });
   }
 
-  Widget listWidget(CharacterData characterData, Store<RootState> store) {
+  Widget listWidget(BuildContext context, CharacterData characterData,
+      Store<RootState> store) {
     final characterId = characterData.id;
+    final padding =
+        EdgeInsets.only(top: 0, bottom: MediaQuery.of(context).padding.bottom);
+
     return StreamBuilder(
         stream: appDatabase.streamSeries(characterId),
         builder: (context, AsyncSnapshot<List<SeriesData>> series) {
           List<SeriesData> list = series.data ?? [];
           RequestStatus status = selectSeriesRequestStatus(store.state);
-          ApiParam param = selectCharacterParam(store.state);
+          ApiParam param = selectSeriesParam(store.state);
           return status.isEmpty
-              ? EmptyView(
-                  onPress: () =>
-                      store.dispatch(RequestSeries(characterId: characterId)))
+              ? const EmptyView(message: "関連シリーズが見つかりませんでした")
               : (status.isLoading && list.isEmpty)
                   ? const LoadingView()
                   : ListView.builder(
-                      padding: EdgeInsets.zero,
+                      padding: padding,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: list.length + (param.hasNext == true ? 1 : 0),
@@ -77,14 +78,15 @@ class CharacterDetailPage extends StatelessWidget {
         });
   }
 
-  Widget sliverList(CharacterData characterData, Store<RootState> store) {
+  Widget sliverList(BuildContext context, CharacterData characterData,
+      Store<RootState> store) {
     return SliverList(
         delegate: SliverChildListDelegate([
       Visibility(
           visible: characterData.description.isNotEmpty,
           child: Text(characterData.description,
               style: GoogleFonts.carterOne(fontSize: 24))),
-      listWidget(characterData, store),
+      listWidget(context, characterData, store),
     ]));
   }
 
@@ -137,8 +139,8 @@ class CharacterDetailPage extends StatelessWidget {
               child: CustomScrollView(slivers: <Widget>[
                 sliverAppBar(context, characterData),
                 SliverPadding(
-                  padding: const EdgeInsets.all(16.0),
-                  sliver: sliverList(characterData, store),
+                  padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                  sliver: sliverList(context, characterData, store),
                 ),
               ]));
         });

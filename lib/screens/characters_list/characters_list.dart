@@ -32,8 +32,11 @@ class CharactersListPage extends StatelessWidget {
     return CharacterItem(character: item, onPress: () => _onPress(item));
   }
 
-  Widget listWidget(List<CharacterData> items, Store<RootState> store) {
+  Widget listWidget(
+      BuildContext context, List<CharacterData> items, Store<RootState> store) {
     ApiParam param = selectCharacterParam(store.state);
+    final padding =
+        EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom);
     return NotificationListener<ScrollNotification>(
         onNotification: (ScrollNotification scrollInfo) {
           if (scrollInfo.metrics.pixels >
@@ -47,7 +50,7 @@ class CharactersListPage extends StatelessWidget {
               store.dispatch(RequestCharacters());
             },
             child: ListView.builder(
-              padding: EdgeInsets.zero,
+              padding: padding,
               itemCount: items.length + (param.hasNext == true ? 1 : 0),
               itemBuilder: (BuildContext context, int index) {
                 if (index < items.length) {
@@ -79,7 +82,7 @@ class CharactersListPage extends StatelessWidget {
                         onPress: () => store.dispatch(RequestCharacters()))
                     : (status.isLoading && items.isEmpty)
                         ? const LoadingView()
-                        : listWidget(items, store);
+                        : listWidget(context, items, store);
               });
         });
   }
