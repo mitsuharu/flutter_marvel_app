@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class EmptyView extends StatelessWidget {
+  final String message;
   final VoidCallback? onPress;
-  const EmptyView({Key? key, required this.onPress}) : super(key: key);
-
-  final message = "見つかりませんでした";
+  const EmptyView({Key? key, this.message = "見つかりませんでした", this.onPress})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
