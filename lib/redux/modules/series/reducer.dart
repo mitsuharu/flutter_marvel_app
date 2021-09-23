@@ -1,33 +1,31 @@
 import 'package:flutter_marvel_app/redux/modules/series/actions.dart';
 import 'package:flutter_marvel_app/redux/modules/series/state.dart';
 import 'package:flutter_marvel_app/redux/types/api_param.dart';
+import 'package:flutter_marvel_app/redux/types/request_status.dart';
 
 SeriesState seriesReducer(SeriesState state, dynamic action) {
   if (action is RequestSeries) {
-    print("RequestSeries action.characterId: ${action.characterId}");
-    final nextApiParam =
-        ApiParam.initialState().copyWith(characterId: action.characterId);
-
-    print("RequestSeries nextApiParam: ${nextApiParam.characterId}");
     return state.copyWith(
-      apiParam: nextApiParam,
+      param: ApiParam.initialState(),
+      filter: state.filter.copyWith(characterId: action.characterId),
       status: RequestStatus.loading,
     );
   }
 
   if (action is RequestSeriesSucceeded) {
     final _data = action.response?.data;
-    final nextApiParam = _data != null
-        ? state.apiParam.copyWith(
+    final nextParam = _data != null
+        ? state.param.copyWith(
             offset: _data.offset,
             limit: _data.limit,
             total: _data.total,
             hasNext: (_data.offset + _data.limit) < _data.total)
-        : state.apiParam;
+        : state.param;
+    final nexStatus =
+        nextParam.total == 0 ? RequestStatus.empty : RequestStatus.success;
     return state.copyWith(
-      apiParam: nextApiParam,
-      status:
-          nextApiParam.total == 0 ? RequestStatus.empty : RequestStatus.success,
+      param: nextParam,
+      status: nexStatus,
     );
   }
 
