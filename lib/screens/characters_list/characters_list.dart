@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_marvel_app/database/db.dart';
 import 'package:flutter_marvel_app/main.dart';
-import 'package:flutter_marvel_app/redux/types/api_param.dart';
+import 'package:flutter_marvel_app/redux/modules/character/selectors.dart';
+import 'package:flutter_marvel_app/redux/types/request_status.dart';
 import 'package:flutter_marvel_app/router/router.dart';
 import 'package:flutter_marvel_app/screens/characters_list/list.dart';
 import 'package:flutter_marvel_app/screens/characters_list/search_app_bar.dart';
@@ -31,14 +32,15 @@ class CharactersListPage extends StatelessWidget {
               builder:
                   (context, AsyncSnapshot<List<CharacterData>> characters) {
                 List<CharacterData> list = characters.data ?? [];
-                return store.state.character.status == RequestStatus.empty
+                RequestStatus status =
+                    selectCharacterRequestStatus(store.state);
+                return status.isEmpty
                     ? EmptyView(
                         onPress: () => store.dispatch(RequestCharacters()))
                     : ItemList(
                         items: list,
-                        isLoading: store.state.character.status ==
-                            RequestStatus.loading,
-                        hasNext: store.state.character.apiParam.hasNext,
+                        isLoading: status.isLoading,
+                        hasNext: selectCharacterParam(store.state).hasNext,
                         onRefresh: () => store.dispatch(RequestCharacters()),
                         onEndReached: () =>
                             store.dispatch(LoadMoreCharacters()),

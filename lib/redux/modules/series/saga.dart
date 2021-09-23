@@ -6,6 +6,7 @@ import 'package:flutter_marvel_app/main.dart';
 import 'package:flutter_marvel_app/redux/modules/series/actions.dart';
 import 'package:flutter_marvel_app/redux/modules/series/selectors.dart';
 import 'package:flutter_marvel_app/redux/types/api_param.dart';
+import 'package:flutter_marvel_app/redux/types/series_filter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux_saga/redux_saga.dart';
 
@@ -31,12 +32,15 @@ Iterable _requestSeriesSaga({dynamic action}) sync* {
 Iterable _fetchSeriesSaga({dynamic action}) sync* {
   yield Try(() sync* {
     var param = Result<ApiParam>();
-    yield Select(selector: selectSeriesApiParam, result: param);
+    yield Select(selector: selectSeriesParam, result: param);
     if (param.value!.hasNext == false) {
       // 次がなければ何もしないで終了する
       yield Put(RequestSeriesSucceeded());
       return;
     }
+
+    var filter = Result<SeriesFilter>();
+    yield Select(selector: selectSeriesFilter, result: filter);
 
     var offset = param.value!.offset;
     if (action is LoadMoreSeries) {
@@ -50,13 +54,13 @@ Iterable _fetchSeriesSaga({dynamic action}) sync* {
     var response = Result<cs.CharacterSeriesResponse>();
     yield Call(
         () => api.requestCharacterSeries(
-            offset: offset, characterId: param.value!.characterId!),
+            offset: offset, characterId: filter.value!.characterId),
         result: response);
 
     yield Put(RequestSeriesSucceeded(response: response.value!));
     yield Call(() {
       appDatabase.insertSeriesFromApi(
-          param.value!.characterId!, response.value!.data.results);
+          filter.value!.characterId, response.value!.data.results);
     });
   }, Catch: (e, s) sync* {
     print("_fetchSeriesSaga error $e");

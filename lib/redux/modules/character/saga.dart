@@ -5,6 +5,7 @@ import 'package:flutter_marvel_app/main.dart';
 import 'package:flutter_marvel_app/redux/modules/character/actions.dart';
 import 'package:flutter_marvel_app/redux/modules/character/selectors.dart';
 import 'package:flutter_marvel_app/redux/types/api_param.dart';
+import 'package:flutter_marvel_app/redux/types/character_filter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux_saga/redux_saga.dart';
 
@@ -29,12 +30,15 @@ Iterable _requestCharactersSaga({dynamic action}) sync* {
 Iterable _fetchCharactersSaga({dynamic action}) sync* {
   yield Try(() sync* {
     var param = Result<ApiParam>();
-    yield Select(selector: selectCharacterApiParam, result: param);
+    yield Select(selector: selectCharacterParam, result: param);
     if (param.value!.hasNext == false) {
       // 次がなければ何もしないで終了する
       yield Put(RequestCharactersSucceeded());
       return;
     }
+
+    var filter = Result<CharacterFilter>();
+    yield Select(selector: selectCharacterFilter, result: filter);
 
     var offset = param.value!.offset;
     if (action is LoadMoreCharacters) {
@@ -47,7 +51,7 @@ Iterable _fetchCharactersSaga({dynamic action}) sync* {
 
     var response = Result<res.CharactersResponse>();
     yield Call(
-        () => api.requestCharacters(offset: offset, name: param.value!.name),
+        () => api.requestCharacters(offset: offset, name: filter.value!.name),
         result: response);
 
     yield Put(RequestCharactersSucceeded(response: response.value!));
