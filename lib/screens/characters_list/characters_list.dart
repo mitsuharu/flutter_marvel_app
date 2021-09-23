@@ -4,9 +4,10 @@ import 'package:flutter_marvel_app/main.dart';
 import 'package:flutter_marvel_app/redux/modules/character/selectors.dart';
 import 'package:flutter_marvel_app/redux/types/request_status.dart';
 import 'package:flutter_marvel_app/router/router.dart';
-import 'package:flutter_marvel_app/screens/characters_list/list.dart';
+import 'package:flutter_marvel_app/screens/characters_list/item.dart';
 import 'package:flutter_marvel_app/screens/characters_list/search_app_bar.dart';
 import 'package:flutter_marvel_app/screens/commons/empty_view.dart';
+import 'package:flutter_marvel_app/screens/commons/item_list.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_marvel_app/redux/root_state.dart';
 import 'package:flutter_marvel_app/redux/modules/character/actions.dart';
@@ -23,6 +24,10 @@ class CharactersListPage extends StatelessWidget {
     }
   }
 
+  Item renderItem(CharacterData item, int? index) {
+    return Item(character: item, onPress: () => _onPress(item));
+  }
+
   Widget listWidget(BuildContext context) {
     return StoreBuilder<RootState>(
         onInit: (store) => store.dispatch(RequestCharacters()),
@@ -37,14 +42,15 @@ class CharactersListPage extends StatelessWidget {
                 return status.isEmpty
                     ? EmptyView(
                         onPress: () => store.dispatch(RequestCharacters()))
-                    : ItemList(
+                    : ItemList<CharacterData, Item>(
                         items: list,
                         isLoading: status.isLoading,
                         hasNext: selectCharacterParam(store.state).hasNext,
+                        renderItem: renderItem,
                         onRefresh: () => store.dispatch(RequestCharacters()),
                         onEndReached: () =>
                             store.dispatch(LoadMoreCharacters()),
-                        onPress: (res) => _onPress(res));
+                      );
               });
         });
   }
