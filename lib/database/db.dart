@@ -40,7 +40,7 @@ class AppDatabase extends _$AppDatabase {
     return (select(character)..where((t) => t.id.equals(id))).watchSingle();
   }
 
-  Stream<List<SeriesData>> streamCharacterSeries(String chracterId) {
+  Stream<List<SeriesData>> streamSeries(String chracterId) {
     return (select(series)..where((tbl) => tbl.characterId.equals(chracterId)))
         .watch();
   }

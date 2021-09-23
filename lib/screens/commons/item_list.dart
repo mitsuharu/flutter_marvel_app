@@ -12,6 +12,7 @@ class ItemList<T, W extends Widget> extends StatefulWidget {
   final VoidCallback? onRefresh;
   final VoidCallback? onEndReached;
   final WidgetCallback<T, W> renderItem;
+  final bool isNest;
 
   const ItemList({
     Key? key,
@@ -21,6 +22,7 @@ class ItemList<T, W extends Widget> extends StatefulWidget {
     required this.onRefresh,
     required this.onEndReached,
     required this.renderItem,
+    this.isNest = false,
   }) : super(key: key);
 
   @override
@@ -48,6 +50,9 @@ class _ItemListState<T, W extends Widget> extends State<ItemList<T, W>> {
     double positionRate =
         _scrollController.offset / _scrollController.position.maxScrollExtent;
     const threshold = 0.8;
+
+    print("_scrollListener positionRate: $positionRate, threshold: $threshold");
+
     if (positionRate > threshold) {
       widget.onEndReached?.call();
     }
@@ -72,7 +77,7 @@ class _ItemListState<T, W extends Widget> extends State<ItemList<T, W>> {
   /// item のセパレーター
   final separator = const BoxDecoration(
     border: Border(
-      bottom: BorderSide(color: Colors.black38),
+      bottom: BorderSide(width: 1.0, color: Colors.black26),
     ),
   );
 
@@ -84,6 +89,9 @@ class _ItemListState<T, W extends Widget> extends State<ItemList<T, W>> {
     }
 
     var listView = ListView.builder(
+      padding: EdgeInsets.zero,
+      shrinkWrap: widget.isNest,
+      physics: widget.isNest ? const NeverScrollableScrollPhysics() : null,
       controller: _scrollController,
       itemCount: widget.items.length + (widget.hasNext == true ? 1 : 0),
       itemBuilder: (BuildContext context, int index) {
