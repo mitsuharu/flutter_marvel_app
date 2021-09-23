@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_marvel_app/database/db.dart';
 
-class Item extends StatelessWidget {
-  final SeriesData series;
+class CharacterItem extends StatelessWidget {
+  final CharacterData character;
   final VoidCallback onPress;
 
-  const Item({Key? key, required this.series, required this.onPress})
+  const CharacterItem(
+      {Key? key, required this.character, required this.onPress})
       : super(key: key);
 
   Widget imageWidget() {
     const noImagePath = 'lib/images/no-image.png';
-    if (series.thumbnailUrl.isNotEmpty) {
+    if (character.thumbnailUrl.isNotEmpty) {
       return FadeInImage.assetNetwork(
         fit: BoxFit.contain,
         placeholder: noImagePath,
-        image: series.thumbnailUrl,
+        image: character.thumbnailUrl,
       );
     }
     return Image.asset(noImagePath);
@@ -24,21 +25,21 @@ class Item extends StatelessWidget {
     return Row(
       children: [
         SizedBox(
-          height: 80,
-          width: 80,
+          height: 160,
+          width: 160,
           child: imageWidget(),
         ),
         const SizedBox(width: 10),
         Expanded(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(series.title,
+            Text(character.name,
                 style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             Visibility(
-                visible: series.description.isNotEmpty,
-                child: Text(series.description,
-                    maxLines: 2, overflow: TextOverflow.ellipsis))
+                visible: character.description.isNotEmpty,
+                child: Text(character.description,
+                    maxLines: 3, overflow: TextOverflow.ellipsis))
           ]),
         ),
       ],
