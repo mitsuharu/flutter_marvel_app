@@ -16,7 +16,7 @@ class SearchAppBar extends StatelessWidget with PreferredSizeWidget {
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
-        hintText: 'Who is your Heroes or Villains?',
+        hintText: 'Who is your Hero or Villain?',
         hintStyle:
             const TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
         enabledBorder: UnderlineInputBorder(
