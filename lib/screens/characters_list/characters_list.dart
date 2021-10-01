@@ -20,16 +20,20 @@ import 'package:redux/redux.dart';
 class CharactersListPage extends StatelessWidget {
   const CharactersListPage({Key? key}) : super(key: key);
 
-  void _onPress(CharacterData result) {
+  void _onPress(CharacterData result, int? index) {
     try {
-      routemaster.push("/detail/character/" + result.id);
+      if (index != null) {
+        routemaster.push("/detail/characters/page/" + index.toString());
+      } else {
+        routemaster.push("/detail/character/" + result.id);
+      }
     } on Exception {
       Fluttertoast.showToast(msg: "詳細ページの表示に失敗しました");
     }
   }
 
   CharacterItem renderItem(CharacterData item, int? index) {
-    return CharacterItem(character: item, onPress: () => _onPress(item));
+    return CharacterItem(character: item, onPress: () => _onPress(item, index));
   }
 
   Widget listWidget(
