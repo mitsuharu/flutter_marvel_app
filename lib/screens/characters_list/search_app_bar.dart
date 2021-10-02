@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_marvel_app/redux/modules/character/actions.dart';
+import 'package:flutter_marvel_app/redux/modules/character/selectors.dart';
 import 'package:flutter_marvel_app/redux/root_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 
 class SearchAppBar extends StatelessWidget with PreferredSizeWidget {
   SearchAppBar({Key? key}) : super(key: key);
@@ -10,9 +12,17 @@ class SearchAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
-  Widget textField(ValueSetter<String> onChanged) {
+  Widget textField(Store<RootState> store) {
+    TextEditingController controller = TextEditingController();
+    controller.text = selectCharacterFilter(store.state).name ?? "";
+
+    void onChanged(String text) {
+      store.dispatch(RequestCharacters(name: text));
+    }
+
     return TextField(
       textAlign: TextAlign.center,
+      controller: controller,
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
@@ -39,16 +49,11 @@ class SearchAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<RootState, ValueSetter<String>>(
-      distinct: true,
-      converter: (store) =>
-          (text) => store.dispatch(RequestCharacters(name: text)),
-      builder: (context, onChanged) {
-        return AppBar(
-            title: Padding(
-                padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
-                child: textField(onChanged)));
-      },
-    );
+    return StoreBuilder<RootState>(builder: (context, store) {
+      return AppBar(
+          title: Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
+              child: textField(store)));
+    });
   }
 }

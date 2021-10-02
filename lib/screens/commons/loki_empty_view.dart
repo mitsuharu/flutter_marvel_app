@@ -48,7 +48,7 @@ class LokiEmptyView extends HookWidget {
                       visibleLottie.value = true;
                       lokiMessage.value = "ロキが現れた！！";
                       animationController
-                        ..duration = const Duration(seconds: 6)
+                        ..duration = const Duration(seconds: 3)
                         ..reset()
                         ..forward();
                     }
