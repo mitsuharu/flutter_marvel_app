@@ -11,6 +11,7 @@ import 'package:flutter_marvel_app/screens/commons/empty_view.dart';
 import 'package:flutter_marvel_app/screens/commons/item_separater.dart';
 import 'package:flutter_marvel_app/screens/commons/loading_item.dart';
 import 'package:flutter_marvel_app/screens/commons/loading_view.dart';
+import 'package:flutter_marvel_app/screens/commons/loki_empty_view.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_marvel_app/redux/root_state.dart';
 import 'package:flutter_marvel_app/redux/modules/character/actions.dart';
@@ -82,8 +83,9 @@ class CharactersListPage extends StatelessWidget {
                 RequestStatus status =
                     selectCharacterRequestStatus(store.state);
                 return status.isEmpty
-                    ? EmptyView(
-                        onPress: () => store.dispatch(RequestCharacters()))
+                    ? LokiEmptyView(
+                        onPress: () =>
+                            store.dispatch(RequestCharacters(name: "Loki")))
                     : (status.isLoading && items.isEmpty)
                         ? const LoadingView()
                         : listWidget(context, items, store);
