@@ -7,10 +7,10 @@ import 'package:flutter_marvel_app/redux/types/request_status.dart';
 import 'package:flutter_marvel_app/router/router.dart';
 import 'package:flutter_marvel_app/screens/characters_list/character_item.dart';
 import 'package:flutter_marvel_app/screens/characters_list/search_app_bar.dart';
-import 'package:flutter_marvel_app/screens/commons/empty_view.dart';
 import 'package:flutter_marvel_app/screens/commons/item_separater.dart';
 import 'package:flutter_marvel_app/screens/commons/loading_item.dart';
 import 'package:flutter_marvel_app/screens/commons/loading_view.dart';
+import 'package:flutter_marvel_app/screens/commons/loki_empty_view.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_marvel_app/redux/root_state.dart';
 import 'package:flutter_marvel_app/redux/modules/character/actions.dart';
@@ -20,16 +20,20 @@ import 'package:redux/redux.dart';
 class CharactersListPage extends StatelessWidget {
   const CharactersListPage({Key? key}) : super(key: key);
 
-  void _onPress(CharacterData result) {
+  void _onPress(CharacterData result, int? index) {
     try {
-      routemaster.push("/detail/character/" + result.id);
+      if (index != null) {
+        routemaster.push("/detail/characters/page/" + index.toString());
+      } else {
+        routemaster.push("/detail/character/" + result.id);
+      }
     } on Exception {
       Fluttertoast.showToast(msg: "詳細ページの表示に失敗しました");
     }
   }
 
   CharacterItem renderItem(CharacterData item, int? index) {
-    return CharacterItem(character: item, onPress: () => _onPress(item));
+    return CharacterItem(character: item, onPress: () => _onPress(item, index));
   }
 
   Widget listWidget(
@@ -78,8 +82,9 @@ class CharactersListPage extends StatelessWidget {
                 RequestStatus status =
                     selectCharacterRequestStatus(store.state);
                 return status.isEmpty
-                    ? EmptyView(
-                        onPress: () => store.dispatch(RequestCharacters()))
+                    ? LokiEmptyView(
+                        onPress: () =>
+                            store.dispatch(RequestCharacters(name: "Loki")))
                     : (status.isLoading && items.isEmpty)
                         ? const LoadingView()
                         : listWidget(context, items, store);

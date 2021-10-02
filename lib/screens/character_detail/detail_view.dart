@@ -18,10 +18,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:redux/redux.dart';
 
-class CharacterDetailPage extends StatelessWidget {
-  final String characterId;
-  const CharacterDetailPage({Key? key, required this.characterId})
-      : super(key: key);
+class DetailView extends StatelessWidget {
+  final CharacterData characterData;
+  const DetailView({Key? key, required this.characterData}) : super(key: key);
 
   Future<void> _launchURL(String url) async {
     try {
@@ -42,8 +41,7 @@ class CharacterDetailPage extends StatelessWidget {
         });
   }
 
-  Widget listWidget(BuildContext context, CharacterData characterData,
-      Store<RootState> store) {
+  Widget listWidget(BuildContext context, Store<RootState> store) {
     final characterId = characterData.id;
     final padding =
         EdgeInsets.only(top: 0, bottom: MediaQuery.of(context).padding.bottom);
@@ -78,19 +76,18 @@ class CharacterDetailPage extends StatelessWidget {
         });
   }
 
-  Widget sliverList(BuildContext context, CharacterData characterData,
-      Store<RootState> store) {
+  Widget sliverList(BuildContext context, Store<RootState> store) {
     return SliverList(
         delegate: SliverChildListDelegate([
       Visibility(
           visible: characterData.description.isNotEmpty,
           child: Text(characterData.description,
               style: GoogleFonts.carterOne(fontSize: 24))),
-      listWidget(context, characterData, store),
+      listWidget(context, store),
     ]));
   }
 
-  Widget thumbnailView(CharacterData characterData) {
+  Widget thumbnailView() {
     const noImagePath = 'lib/images/no-image.png';
     if (characterData.thumbnailUrl.isNotEmpty) {
       return FadeInImage.assetNetwork(
@@ -102,7 +99,7 @@ class CharacterDetailPage extends StatelessWidget {
     return Image.asset(noImagePath);
   }
 
-  Widget sliverAppBar(BuildContext context, CharacterData characterData) {
+  Widget sliverAppBar(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return SliverAppBar(
       floating: true,
@@ -119,14 +116,14 @@ class CharacterDetailPage extends StatelessWidget {
                   decorationColor: Colors.blue,
                 ),
               )),
-          background: thumbnailView(characterData)),
+          background: thumbnailView()),
     );
   }
 
-  Widget customScrollView(BuildContext context, CharacterData characterData) {
+  Widget customScrollView(BuildContext context) {
     return StoreBuilder<RootState>(
         onInit: (store) =>
-            store.dispatch(RequestSeries(characterId: characterId)),
+            store.dispatch(RequestSeries(characterId: characterData.id)),
         builder: (context, store) {
           return NotificationListener<ScrollNotification>(
               onNotification: (ScrollNotification scrollInfo) {
@@ -137,38 +134,17 @@ class CharacterDetailPage extends StatelessWidget {
                 return false;
               },
               child: CustomScrollView(slivers: <Widget>[
-                sliverAppBar(context, characterData),
+                sliverAppBar(context),
                 SliverPadding(
                   padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
-                  sliver: sliverList(context, characterData, store),
+                  sliver: sliverList(context, store),
                 ),
               ]));
         });
   }
 
-  Widget streamWidget(BuildContext context) {
-    return StreamBuilder(
-        stream: appDatabase.getCharacter(characterId),
-        builder: (context, AsyncSnapshot<CharacterData> character) {
-          if (character.data != null) {
-            return customScrollView(context, character.data!);
-          } else {
-            return detailEmptyView(context);
-          }
-        });
-  }
-
-  Widget detailEmptyView(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: const EmptyView(onPress: null),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: streamWidget(context),
-    );
+    return customScrollView(context);
   }
 }

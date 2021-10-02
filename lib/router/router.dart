@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_marvel_app/screens/character_detail/character_detail.dart';
+import 'package:flutter_marvel_app/screens/character_detail/index.dart';
 import 'package:flutter_marvel_app/screens/characters_list/characters_list.dart';
+import 'package:flutter_marvel_app/screens/characters_page_view/characters_page_view.dart';
 import 'package:routemaster/routemaster.dart';
 
 final _routes = RouteMap(
@@ -11,6 +12,10 @@ final _routes = RouteMap(
       return MaterialPage(
           child: CharacterDetailPage(characterId: info.pathParameters['id']!));
     },
+    "/detail/characters/page/:index": (info) {
+      return MaterialPage(
+          child: CharactersPageView(index: info.pathParameters['index']!));
+    }
   },
 );
 
