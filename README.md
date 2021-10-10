@@ -2,9 +2,9 @@
 
 It shows the Marvel Heros and Villains with Offical Marvel API.
 
-<img src="./sceenshots/main-list.png" width="200" />
-<img src="./sceenshots/main-search.png" width="200" />
-<img src="./sceenshots/detail-chara-header.png" width="200" />
+| main | search | detail |
+| :-:|:-:|:-:|
+|<img src="./sceenshots/main-list.png" width="200" />|<img src="./sceenshots/main-search.png" width="200" />|<img src="./sceenshots/detail-chara-header.png" width="200" />|
 
 
 
