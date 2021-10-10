@@ -2,7 +2,10 @@
 
 It shows the Marvel Heros and Villains with Offical Marvel API.
 
-<img src="./sceenshots/iron-man.png" width="200" />
+<img src="./sceenshots/main-list.png" width="200" />
+<img src="./sceenshots/main-search.png" width="200" />
+<img src="./sceenshots/detail-chara-header.png" width="200" />
+
 
 
 ## Tech Stack
@@ -27,12 +30,19 @@ Doctor summary (to see all details, run flutter doctor -v):
 
 State
 
-- Redux Saga
+- main:
+	- Redux Saga
+- sub
+	- Provier
+	- flutter_hooks
 
 DB
 
 - [Moor](https://moor.simonbinder.eu/)
 
+Routing
+
+- [routemaster](https://pub.dev/packages/routemaster)
 
 ## Getting Started
 
