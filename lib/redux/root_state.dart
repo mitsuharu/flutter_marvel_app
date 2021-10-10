@@ -25,11 +25,29 @@ class RootState {
     );
   }
 
-  static initialState() {
+  static RootState initialState() {
     return RootState(
       character: CharacterState.initialState(),
       series: SeriesState.initialState(),
       userSetting: UserSettingState.initialState(),
     );
+  }
+
+  static RootState fromJson(dynamic json) {
+    try {
+      // 永続化は userSetting のみとする
+      return RootState.initialState().copyWith(
+        userSetting: UserSettingState.fromJson(json["userSetting"]),
+      );
+    } catch (e) {
+      // ignore: avoid_print
+      print("RootState#fromJson $e");
+      return RootState.initialState();
+    }
+  }
+
+  dynamic toJson() {
+    // 永続化は userSetting のみとする
+    return {"userSetting": userSetting.toJson()};
   }
 }
