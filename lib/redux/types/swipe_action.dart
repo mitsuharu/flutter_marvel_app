@@ -1,0 +1,4 @@
+enum SwipeAction {
+  back,
+  pasing,
+}
