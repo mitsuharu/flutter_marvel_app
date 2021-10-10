@@ -22,23 +22,19 @@ class SearchAppBar extends StatelessWidget with PreferredSizeWidget {
     }
 
     return TextField(
-      textAlign: TextAlign.center,
       controller: controller,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         filled: true,
         fillColor: Colors.transparent,
         hintText: 'Who is your Hero or Villain?',
-        hintStyle:
-            const TextStyle(color: Colors.white, fontStyle: FontStyle.italic),
+        hintStyle: TextStyle(color: Colors.white, fontStyle: FontStyle.italic),
         enabledBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.circular(32),
+          borderSide: BorderSide(color: Colors.white),
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.circular(32),
+          borderSide: BorderSide(color: Colors.white),
         ),
-        // prefixIcon: const Icon(Icons.search, color: Colors.white),
+        // prefixIcon: Icon(Icons.search, color: Colors.white),
       ),
       style: const TextStyle(
         color: Colors.white,
