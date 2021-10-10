@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_marvel_app/redux/modules/character/actions.dart';
 import 'package:flutter_marvel_app/redux/modules/character/selectors.dart';
 import 'package:flutter_marvel_app/redux/root_state.dart';
+import 'package:flutter_marvel_app/router/router.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
@@ -25,10 +26,10 @@ class SearchAppBar extends StatelessWidget with PreferredSizeWidget {
       controller: controller,
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.white,
+        fillColor: Colors.transparent,
         hintText: 'Who is your Hero or Villain?',
         hintStyle:
-            const TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),
+            const TextStyle(color: Colors.white, fontStyle: FontStyle.italic),
         enabledBorder: UnderlineInputBorder(
           borderSide: const BorderSide(color: Colors.white),
           borderRadius: BorderRadius.circular(32),
@@ -37,9 +38,10 @@ class SearchAppBar extends StatelessWidget with PreferredSizeWidget {
           borderSide: const BorderSide(color: Colors.white),
           borderRadius: BorderRadius.circular(32),
         ),
+        // prefixIcon: const Icon(Icons.search, color: Colors.white),
       ),
       style: const TextStyle(
-        color: Colors.black,
+        color: Colors.white,
       ),
       onSubmitted: onChanged,
       showCursor: true,
@@ -51,9 +53,13 @@ class SearchAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return StoreBuilder<RootState>(builder: (context, store) {
       return AppBar(
-          title: Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 10),
-              child: textField(store)));
+        title: textField(store),
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () => routemaster.push("/settings")),
+        ],
+      );
     });
   }
 }
